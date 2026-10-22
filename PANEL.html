@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA DOWNLOADER v3.0 | The Ultimate Engine</title>
+    <!-- Premium Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SEO Meta Tags -->
+<meta name="description" content="Nova Downloader v3.0 - The world's fastest batch video downloader for YouTube and TikTok. High speed, HWID secured.">
+<meta name="keywords" content="Nova Downloader, Video Downloader, YouTube Batch Downloader, TikTok Downloader, Danish Mureed, Fast Downloader">
+<meta name="author" content="Danish Mureed">
+<meta name="robots" content="index, follow">
+    <style>
+        :root {
+            --bg-base: #000000;
+            --bg-card: rgba(15, 15, 20, 0.4);
+            --primary: #8b5cf6; 
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --accent: #0ea5e9; 
+            --accent-glow: rgba(14, 165, 233, 0.4);
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-base); color: var(--text-main);
+            font-family: 'Outfit', sans-serif; overflow-x: hidden; line-height: 1.6;
+        }
+
+        /* Moving Cyber Grid Background */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            animation: moveGrid 20s linear infinite;
+        }
+        @keyframes moveGrid { 0% { transform: translateY(0); } 100% { transform: translateY(50px); } }
+
+        /* Ambient Glowing Orbs */
+        .orb { position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1; animation: float 10s infinite alternate ease-in-out; opacity: 0.6; }
+        .orb-1 { top: -10%; left: 10%; width: 500px; height: 500px; background: var(--primary); }
+        .orb-2 { bottom: 10%; right: 5%; width: 400px; height: 400px; background: var(--accent); animation-delay: -5s; }
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(60px, 60px); } }
+
+        /* HEADER */
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px 6%;
+            border-bottom: 1px solid var(--border); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(0, 0, 0, 0.5);
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; }
+        .logo i { color: var(--accent); filter: drop-shadow(0 0 10px var(--accent-glow)); }
+        .logo span { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; color: transparent; }
+
+        nav { display: flex; gap: 40px; }
+        nav a { color: var(--text-sub); text-decoration: none; font-weight: 500; transition: 0.3s; position: relative; }
+        nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        .btn-header {
+            background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff;
+            padding: 10px 28px; border-radius: 50px; text-decoration: none; font-weight: 700;
+            box-shadow: 0 0 20px var(--primary-glow); transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+        .btn-header:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 0 35px var(--primary-glow); }
+
+        /* Scroll Reveal Animations */
+        .reveal { opacity: 0; transform: translateY(50px) scale(0.95); transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* HERO SECTION */
+        .hero { text-align: center; padding: 180px 20px 60px; max-width: 1100px; margin: 0 auto; position: relative; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3); padding: 8px 24px; border-radius: 50px; font-weight: 600;
+            margin-bottom: 30px; box-shadow: 0 0 20px var(--primary-glow);
+        }
+        
+        .hero h1 { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 24px; letter-spacing: -2px; }
+        .hero h1 span.gradient-text { background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Typing Text */
+        .typing-container { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; min-height: 50px; margin-bottom: 30px; text-shadow: 0 0 20px var(--accent-glow); }
+        .cursor { display: inline-block; width: 3px; background: var(--accent); margin-left: 5px; animation: blink 0.8s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .hero p { font-size: 1.25rem; color: var(--text-sub); margin-bottom: 45px; max-width: 750px; margin-inline: auto; font-weight: 300; }
+        .hero-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .btn-large { padding: 18px 45px; border-radius: 14px; font-size: 1.1rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: 0.3s; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #6d28d9); color: #fff; box-shadow: 0 10px 30px rgba(109, 40, 217, 0.5); border: 1px solid rgba(139, 92, 246, 0.5); }
+        .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(109, 40, 217, 0.7); filter: brightness(1.2); }
+        .btn-secondary { background: rgba(255,255,255,0.03); color: #fff; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); transform: translateY(-4px); }
+
+        /* APP SHOWCASE 3D */
+        .showcase-container { max-width: 1400px; margin: 20px auto 100px; padding: 0 20px; perspective: 1200px; }
+        .app-window {
+            background: rgba(10, 10, 12, 0.8); border-radius: 16px; padding: 10px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 40px 100px -20px var(--primary-glow), 0 0 40px var(--accent-glow);
+            transform: rotateX(8deg) scale(0.95) translateY(20px); transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(20px); overflow: hidden;
+        }
+        .showcase-container:hover .app-window { transform: rotateX(0deg) scale(1) translateY(0); box-shadow: 0 60px 120px -20px var(--primary-glow), 0 0 80px var(--accent-glow); border-color: rgba(139, 92, 246, 0.4); }
+        
+        .app-window img { width: 100%; height: auto; border-radius: 8px; display: block; object-fit: cover; }
+        .app-header { display: flex; gap: 8px; padding: 10px 15px; margin-bottom: 5px; background: #111; border-radius: 8px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .app-header div { width: 12px; height: 12px; border-radius: 50%; }
+        .app-header .r { background: #ef4444; box-shadow: 0 0 10px #ef4444; } 
+        .app-header .y { background: #eab308; box-shadow: 0 0 10px #eab308; } 
+        .app-header .g { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+
+        /* SCROLLING MARQUEE */
+        .marquee { width: 100%; background: linear-gradient(90deg, #000, rgba(139, 92, 246, 0.2), #000); border-top: 1px solid rgba(139, 92, 246, 0.3); border-bottom: 1px solid rgba(139, 92, 246, 0.3); color: #fff; padding: 20px 0; overflow: hidden; white-space: nowrap; display: flex; gap: 40px; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+        .marquee div { display: flex; gap: 60px; animation: scrollText 20s linear infinite; }
+        .marquee span { display: flex; align-items: center; gap: 15px; text-shadow: 0 0 15px var(--primary-glow); }
+        .marquee i { color: var(--accent); }
+        @keyframes scrollText { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+        /* LIVE DEMO SIMULATOR */
+        .demo-section { padding: 100px 20px; text-align: center; }
+        .demo-title { font-size: 3rem; font-weight: 900; margin-bottom: 15px; }
+        .demo-title span { background: linear-gradient(90deg, var(--accent), var(--primary)); -webkit-background-clip: text; color: transparent; }
+        
+        .simulator-box { max-width: 800px; margin: 40px auto 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 35px; backdrop-filter: blur(30px); box-shadow: inset 0 0 20px rgba(255,255,255,0.02), 0 25px 50px -12px rgba(0,0,0,0.8); text-align: left; }
+        .sim-queue { background: #000; border-radius: 12px; padding: 25px; border: 1px solid rgba(139, 92, 246, 0.2); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .item-info { display: flex; justify-content: space-between; font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 15px; font-family: 'JetBrains Mono', monospace; }
+        .progress-track { width: 100%; height: 12px; background: #111; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent), #fff); border-radius: 10px; transition: width 0.1s linear; box-shadow: 0 0 20px var(--accent-glow); }
+        
+        .item-stats { display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--text-sub); margin-top: 15px; font-family: 'JetBrains Mono', monospace;}
+        .speed-text { color: var(--success); font-weight: 800; font-size: 1.2rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+
+        .btn-test { margin-top: 25px; width: 100%; background: transparent; border: 1px solid var(--primary); color: #fff; padding: 18px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 1.1rem; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden; }
+        .btn-test::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent); transition: 0.5s; }
+        .btn-test:hover::before { left: 100%; }
+        .btn-test:hover:not(:disabled) { background: rgba(139, 92, 246, 0.2); box-shadow: 0 0 30px var(--primary-glow); }
+
+        /* Features */
+        .features { padding: 100px 8%; max-width: 1400px; margin: 0 auto; }
+        .sec-header { text-align: center; margin-bottom: 70px; }
+        .sec-header h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 15px; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .f-card {
+            background: var(--bg-card); padding: 40px; border-radius: 20px; border: 1px solid var(--border);
+            backdrop-filter: blur(20px); transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .f-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, rgba(139, 92, 246, 0.1), transparent 30%);
+            animation: rotateShine 6s linear infinite; opacity: 0; transition: 0.3s; z-index: -1;
+        }
+        @keyframes rotateShine { 100% { transform: rotate(360deg); } }
+        .f-card:hover::after { opacity: 1; }
+        .f-card:hover { transform: translateY(-10px); border-color: rgba(139, 92, 246, 0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(139, 92, 246, 0.1); }
+        
+        .f-icon { width: 70px; height: 70px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), transparent); color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 25px; border: 1px solid rgba(14, 165, 233, 0.3); box-shadow: 0 0 20px var(--accent-glow); }
+        .f-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 800; color: #fff; }
+        .f-card p { color: var(--text-sub); font-size: 1.05rem; }
+
+        /* PRICING */
+        .pricing { padding: 100px 8%; max-width: 1200px; margin: 0 auto; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; margin-top: 60px; }
+        .p-card { background: rgba(10, 10, 15, 0.6); border: 1px solid var(--border); border-radius: 24px; padding: 50px 40px; transition: 0.4s; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(30px); }
+        
+        .p-card.vip { background: linear-gradient(180deg, rgba(139,92,246,0.1) 0%, rgba(0,0,0,0.8) 100%); border-color: var(--primary); box-shadow: 0 0 50px rgba(139, 92, 246, 0.15); transform: scale(1.05); z-index: 2; }
+        .p-card.vip:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 0 80px rgba(139, 92, 246, 0.3); }
+        .p-card:not(.vip):hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.2); }
+
+        .vip-badge { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 8px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 20px var(--primary-glow); }
+        
+        .p-title { font-size: 1.4rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .p-price { font-size: 3.5rem; font-weight: 900; margin: 20px 0 30px; color: #fff; font-family: 'JetBrains Mono', monospace; }
+        .p-price span { font-size: 1.2rem; color: var(--text-sub); font-weight: 500; font-family: 'Outfit', sans-serif;}
+        
+        .p-list { list-style: none; flex-grow: 1; margin-bottom: 40px; }
+        .p-list li { display: flex; align-items: center; gap: 15px; margin-bottom: 18px; color: #e2e8f0; font-size: 1.05rem; font-weight: 500; }
+        .p-list li i { color: var(--success); font-size: 1.2rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+        
+        .btn-buy { width: 100%; padding: 18px; border-radius: 14px; text-align: center; text-decoration: none; font-weight: 800; font-size: 1.1rem; transition: 0.3s; position: relative; overflow: hidden; }
+        .btn-outline { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .btn-outline:hover { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        
+        .btn-filled { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border: none; box-shadow: 0 10px 30px var(--primary-glow); }
+        .btn-filled:hover { filter: brightness(1.2); transform: translateY(-3px); box-shadow: 0 15px 40px var(--primary-glow); }
+
+        footer { text-align: center; padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 80px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        footer a { color: var(--accent); text-decoration: none; font-weight: 700; transition: 0.3s; }
+        footer a:hover { color: #fff; text-shadow: 0 0 10px var(--accent-glow); }
+
+        @media(max-width: 992px){ .p-card.vip { transform: scale(1); } .p-card.vip:hover { transform: translateY(-10px) scale(1); } }
+        @media(max-width: 768px){ .hero h1 { font-size: 2.8rem; } header nav { display: none; } .hero { padding-top: 130px; } .typing-container{ font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- Moving Cyber Grid Background -->
+    <div class="bg-grid"></div>
+
+    <!-- Glowing Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-bolt-lightning"></i> <span>NOVA</span>
+        </div>
+        <nav>
+            <a href="#showcase">Interface</a>
+            <a href="#demo">Speed Test</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="admin_panel.html" target="_blank" style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> Admin Portal</a>
+        </nav>
+        <!-- DIRECT DOWNLOAD BUTTON (HEADER) -->
+        <a href="NOVAXDANI_DOWNLOADER.exe" download="NOVAXDANI_DOWNLOADER.exe" class="btn-header">
+            <i class="fa-solid fa-download"></i> Download App
+        </a>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero reveal">
+        <div class="hero-badge">
+            <i class="fa-solid fa-microchip"></i> v3.0 Turbo Engine is Now Live
+        </div>
+        <h1>The Ultimate Downloader.<br><span class="gradient-text">Zero Lag. Max Speed.</span></h1>
+        
+        <!-- Animated Typing Effect -->
+        <div class="typing-container">
+            <span id="typed-text"></span><span class="cursor"></span>
+        </div>
+
+        <p>The world's most powerful Multi-Platform Video & Batch Downloader. Built with purely native Windows telemetry, extreme non-blocking thread handling, and HWID cloud security.</p>
+        
+        <div class="hero-btns">
+            <!-- DIRECT DOWNLOAD BUTTON (HERO) -->
+            <a href="NOVAXDANI_DOWNLOADER.exe" download="NOVAXDANI_DOWNLOADER.exe" class="btn-large btn-primary">
+                <i class="fa-brands fa-windows"></i> Download for Windows (.exe)
+            </a>
+            <a href="#pricing" class="btn-large btn-secondary">
+                <i class="fa-solid fa-key"></i> Buy HWID Key
+            </a>
+        </div>
+    </section>
+
+    <!-- APP SHOWCASE -->
+    <section class="showcase-container reveal" id="showcase">
+        <div class="app-window">
+            <div class="app-header">
+                <div class="r"></div><div class="y"></div><div class="g"></div>
+                <div style="margin-left: 10px; color: #888; font-size: 12px; font-family: 'JetBrains Mono';">NOVA DOWNLOADER - Interface Preview</div>
+            </div>
+            
+            <img src="app_preview.png" id="hero-image" alt="App Dashboard"
+                 onerror="this.onerror=null; this.src='app_preview.jpg'">
+        </div>
+    </section>
+
+    <!-- SCROLLING MARQUEE -->
+    <div class="marquee reveal">
+        <div>
+            <span><i class="fa-solid fa-bolt"></i> 700+ Creator Batch Rendering</span>
+            <span><i class="fa-solid fa-shield"></i> Google Sheets HWID Locked</span>
+            <span><i class="fa-solid fa-microchip"></i> Pure CTypes Native Stats</span>
+            <span><i class="fa-solid fa-box-archive"></i> .novabak Backup Engine</span>
+            <span><i class="fa-solid fa-infinity"></i> Anti-Hang UI Threading</span>
+            <!-- Copy for infinite scroll -->
+            <span><i class="fa-solid fa-bolt"></i> 700+ Creator Batch Rendering</span>
+            <span><i class="fa-solid fa-shield"></i> Google Sheets HWID Locked</span>
+            <span><i class="fa-solid fa-microchip"></i> Pure CTypes Native Stats</span>
+            <span><i class="fa-solid fa-box-archive"></i> .novabak Backup Engine</span>
+            <span><i class="fa-solid fa-infinity"></i> Anti-Hang UI Threading</span>
+        </div>
+    </div>
+
+    <!-- LIVE DEMO SIMULATOR -->
+    <section class="demo-section reveal" id="demo">
+        <h2 class="demo-title">Experience the <span>Speed</span></h2>
+        <p style="color: var(--text-sub); font-size: 1.2rem; max-width: 600px; margin: 0 auto;">Watch our simulated Core Turbo Engine chunking system dynamically allocate threads in real-time.</p>
+        
+        <div class="simulator-box">
+            <div style="margin-bottom: 25px; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: #fff;">
+                <i class="fa-solid fa-terminal" style="color: var(--primary); text-shadow: 0 0 10px var(--primary-glow);"></i> Core Engine Execution Queue
+            </div>
+            <div class="sim-queue">
+                <div class="item-info">
+                    <span><i class="fa-solid fa-file-video" style="color: var(--accent); margin-right: 10px;"></i>[4K_60FPS]_Batch_Creator_Render_01.mp4</span>
+                    <span id="percent-text">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="item-stats">
+                    <span id="status-text"><i class="fa-solid fa-spinner fa-spin"></i> Awaiting INIT Command...</span>
+                    <div style="display: flex; gap: 20px;">
+                        <span>ETA: <span id="eta-text">--:--</span></span>
+                        <span class="speed-text" id="speed-text">0.0 MB/s</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-test" id="test-btn" onclick="startSpeedTest()">
+                <i class="fa-solid fa-rocket"></i> INITIALIZE TURBO CORE
+            </button>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="sec-header reveal">
+            <h2>Built for Power Users</h2>
+            <p style="color: var(--text-sub); font-size: 1.2rem;">Enterprise-grade python modules designed for mass rendering without a single crash.</p>
+        </div>
+        <div class="features-grid">
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-solid fa-server"></i></div>
+                <h3>Anti-Hang Architecture</h3>
+                <p>Add unlimited creators simultaneously. Our non-blocking chunk rendering ensures your desktop never freezes.</p>
+            </div>
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-solid fa-lock"></i></div>
+                <h3>Cloud HWID Locking</h3>
+                <p>Every license is cryptographically bound to your PC's specific Hardware ID via our Google Apps Script Backend.</p>
+            </div>
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-brands fa-windows"></i></div>
+                <h3>Pure Native Telemetry</h3>
+                <p>Zero bloatware. Monitors CPU, RAM, and Network using pure Windows `CTypes` and `GlobalMemoryStatusEx` calls.</p>
+            </div>
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                <h3>.novabak Engine</h3>
+                <p>Export or Import your entire creator directory securely. Backup files automatically exclude license data for safety.</p>
+            </div>
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-solid fa-rotate"></i></div>
+                <h3>Auto-Updating Core</h3>
+                <p>The yt-dlp submodules are automatically synchronized and compiled so platform extractors never become outdated.</p>
+            </div>
+            <div class="f-card reveal">
+                <div class="f-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <h3>VIP Direct Support</h3>
+                <p>Skip the queues. All license holders get direct 24/7 access to the developer for instant bug fixes and features.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="sec-header reveal">
+            <h2>Unlock Full Access</h2>
+            <p style="color: var(--text-sub); font-size: 1.2rem;">Transparent pricing. Instant activation via Admin Dashboard. No hidden fees.</p>
+        </div>
+        <div class="pricing-grid">
+            <!-- Starter -->
+            <div class="p-card reveal">
+                <div class="p-title">Starter Pass</div>
+                <div class="p-price">$10 <span>/ 30 Days</span></div>
+                <ul class="p-list">
+                    <li><i class="fa-solid fa-check"></i> 1 PC Hardware Lock</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited Downloads</li>
+                    <li><i class="fa-solid fa-check"></i> Live Stats Telemetry</li>
+                    <li><i class="fa-solid fa-check"></i> Standard Updates</li>
+                </ul>
+                <a href="https://wa.me/923124930108?text=Hello%20Nova%20Downloader!%20I%20want%20to%20buy%20the%201%20Month%20Starter%20Pass." class="btn-buy btn-outline" target="_blank">Get 30 Days Key</a>
+            </div>
+
+            <!-- PRO (Popular) -->
+            <div class="p-card vip reveal">
+                <div class="vip-badge">Most Popular</div>
+                <div class="p-title">Pro Pass</div>
+                <div class="p-price">$25 <span>/ 90 Days</span></div>
+                <ul class="p-list">
+                    <li><i class="fa-solid fa-check"></i> 1 PC Hardware Lock</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited Batch Rendering</li>
+                    <li><i class="fa-solid fa-check"></i> .novabak Backup & Restore</li>
+                    <li><i class="fa-solid fa-check"></i> Priority Engine Updates</li>
+                    <li><i class="fa-solid fa-check"></i> 24/7 WhatsApp Support</li>
+                </ul>
+                <a href="https://wa.me/923124930108?text=Hello%20Nova%20Downloader!%20I%20want%20to%20buy%20the%203%20Months%20Pro%20Pass." class="btn-buy btn-filled" target="_blank">Get 90 Days Key</a>
+            </div>
+
+            <!-- Lifetime -->
+            <div class="p-card reveal">
+                <div class="p-title">Lifetime VIP</div>
+                <div class="p-price">$60 <span>/ Lifetime</span></div>
+                <ul class="p-list">
+                    <li><i class="fa-solid fa-check"></i> Permanent License</li>
+                    <li><i class="fa-solid fa-check"></i> All Pro Features Included</li>
+                    <li><i class="fa-solid fa-check"></i> Custom Feature Requests</li>
+                    <li><i class="fa-solid fa-check"></i> Free Major Upgrades</li>
+                </ul>
+                <a href="https://wa.me/923124930108?text=Hello%20Nova%20Downloader!%20I%20want%20to%20buy%20the%20Lifetime%20VIP%20License." class="btn-buy btn-outline" target="_blank">Get Lifetime Key</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <h2 style="font-weight: 900; margin-bottom: 20px; font-size: 2.2rem; letter-spacing: -1px;">NOVA DOWNLOADER <span style="color:var(--primary); text-shadow: 0 0 20px var(--primary-glow);">v3.0</span></h2>
+        <p>&copy; 2026 Developed by Danish Mureed. Built for scale.</p>
+        <p style="margin-top:10px;">Direct WhatsApp Order / Support: <a href="https://wa.me/923124930108" target="_blank">+92 312 4930108</a></p>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // Scroll Reveal Animations
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
+            });
+        }, revealOptions);
+        reveals.forEach(reveal => revealOnScroll.observe(reveal));
+
+        // Typing Effect
+        const texts = ["> Extracting 700+ Channels...", "> Bypassing Platform Throttles...", "> Downloading at 145 MB/s...", "> Initiating Native Threads..."];
+        let count = 0; let index = 0; let currentText = ""; let isDeleting = false;
+        
+        function type() {
+            if (count === texts.length) { count = 0; }
+            currentText = texts[count];
+            if (isDeleting) { index--; } else { index++; }
+            
+            document.getElementById("typed-text").innerText = currentText.slice(0, index);
+            
+            let typeSpeed = isDeleting ? 30 : 80;
+            if (!isDeleting && index === currentText.length) { typeSpeed = 2000; isDeleting = true; } 
+            else if (isDeleting && index === 0) { isDeleting = false; count++; typeSpeed = 500; }
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener("DOMContentLoaded", type);
+
+        // Speed Test Simulator
+        function startSpeedTest() {
+            const btn = document.getElementById('test-btn');
+            const bar = document.getElementById('progress-fill');
+            const speedTxt = document.getElementById('speed-text');
+            const statusTxt = document.getElementById('status-text');
+            const percentTxt = document.getElementById('percent-text');
+            const etaTxt = document.getElementById('eta-text');
+
+            if(btn.disabled) return;
+            
+            btn.disabled = true;
+            btn.innerHTML = "<i class='fa-solid fa-microchip fa-fade'></i> Allocating Chunk Threads...";
+            btn.style.borderColor = "#eab308";
+            btn.style.color = "#eab308";
+            bar.style.width = "0%";
+            statusTxt.innerHTML = "<i class='fa-solid fa-network-wired'></i> Bypassing CDN throttles...";
+            statusTxt.style.color = "#eab308";
+            speedTxt.innerText = "0.0 MB/s";
+            percentTxt.innerText = "0%";
+            etaTxt.innerText = "--:--";
+
+            setTimeout(() => {
+                statusTxt.innerHTML = "<i class='fa-solid fa-bolt'></i> Downloading chunks simultaneously...";
+                statusTxt.style.color = "#0ea5e9";
+                btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> CORE ACTIVE";
+                btn.style.borderColor = "#0ea5e9";
+                btn.style.color = "#0ea5e9";
+                let progress = 0;
+                
+                let interval = setInterval(() => {
+                    progress += Math.random() * 3.5 + 1.5; 
+                    
+                    if(progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        statusTxt.innerHTML = "<i class='fa-solid fa-check-double'></i> Video Rendered & Saved (2.8s)";
+                        statusTxt.style.color = "#10b981";
+                        speedTxt.innerText = "0.0 MB/s";
+                        etaTxt.innerText = "00:00";
+                        btn.innerHTML = "<i class='fa-solid fa-rotate-right'></i> RE-INITIALIZE TURBO";
+                        btn.style.borderColor = "#8b5cf6";
+                        btn.style.color = "#fff";
+                        btn.disabled = false;
+                    } else {
+                        let speed = (Math.random() * 55 + 125).toFixed(1); 
+                        speedTxt.innerText = speed + " MB/s";
+                        let secondsLeft = Math.floor((100 - progress) / 8);
+                        etaTxt.innerText = "00:0" + (secondsLeft > 0 ? secondsLeft : 1);
+                    }
+                    bar.style.width = progress + "%";
+                    percentTxt.innerText = Math.floor(progress) + "%";
+                }, 120);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
